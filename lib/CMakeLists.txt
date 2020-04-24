@@ -132,6 +132,7 @@ list(APPEND LZMA_INC liblzma/lzma)
 list(APPEND LZMA_INC liblzma/rangecoder)
 list(APPEND LZMA_INC liblzma/simple)
 list(APPEND LZMA_DEF -DLZMA_API_STATIC)
+list(APPEND LZMA_DEF -DHAVE_CONFIG_H)
 
 target_include_directories(lzma PRIVATE ${LZMA_INC})
 target_compile_definitions(lzma PRIVATE ${LZMA_DEF})
@@ -388,7 +389,8 @@ list(APPEND LIBARCHIVE_SOURCES libarchive/archive_blake2s_ref.c)
 # Libarchive is a shared library
 add_library(archive STATIC ${LIBARCHIVE_SOURCES} ${INCLUDE_HEADERS})
 target_include_directories(archive PRIVATE ${ARCHIVE_INC})
-message(STATUS "ARCHIVE_INC ${ARCHIVE_INC}")
+target_compile_definitions(archive PRIVATE LZMA_API_STATIC=1)
+
 target_link_libraries(
   archive
   brotli

@@ -81,3 +81,4 @@ add_definitions(-D_UNICODE -DUNICODE)
 
 add_subdirectory(lib)
 add_subdirectory(tools/baulktar)
+add_subdirectory(tools/bsdtar)
