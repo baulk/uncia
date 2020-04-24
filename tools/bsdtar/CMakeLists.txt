@@ -9,7 +9,9 @@ set(BSDTAR_SOURCES
   write.c
   err.c
   line_reader.c
-  passphrase.c)
+  passphrase.c
+  bsdtar.rc
+  bsdtar.manifest)
 
 if(WIN32 AND NOT CYGWIN)
 list(APPEND BSDTAR_SOURCES bsdtar_windows.c)

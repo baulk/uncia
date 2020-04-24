@@ -390,6 +390,7 @@ list(APPEND LIBARCHIVE_SOURCES libarchive/archive_blake2s_ref.c)
 add_library(archive STATIC ${LIBARCHIVE_SOURCES} ${INCLUDE_HEADERS})
 target_include_directories(archive PRIVATE ${ARCHIVE_INC})
 target_compile_definitions(archive PRIVATE LZMA_API_STATIC=1)
+target_compile_definitions(archive PRIVATE HAVE_CONFIG_H=1)
 
 target_link_libraries(
   archive
