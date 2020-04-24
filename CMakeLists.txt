@@ -80,4 +80,4 @@ endif()
 add_definitions(-D_UNICODE -DUNICODE)
 
 add_subdirectory(lib)
-add_subdirectory(tools/btar)
+add_subdirectory(tools/baulktar)
