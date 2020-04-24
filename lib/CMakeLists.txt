@@ -206,10 +206,8 @@ add_library(
   zstd/legacy/zstd_v06.c
   zstd/legacy/zstd_v07.c)
 
-set_property(
-  TARGET zstd
-  APPEND
-  PROPERTY COMPILE_DEFINITIONS "ZSTD_MULTITHREAD")
+target_compile_definitions(zstd PRIVATE XXH_NAMESPACE=_zstd_)
+target_compile_definitions(zstd PRIVATE ZSTD_MULTITHREAD)
 target_include_directories(zstd PRIVATE zstd zstd/common zstd/legacy)
 list(APPEND ARCHIVE_INC zstd)
 

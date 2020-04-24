@@ -701,6 +701,7 @@ typedef uint64_t uintmax_t;
 
 /* Define to 1 if you have the `lz4' library (-llz4). */
 /* #undef HAVE_LIBLZ4 */
+#define HAVE_LIBLZ4 1
 
 /* Define to 1 if you have the `lzma' library (-llzma). */
 /* #undef HAVE_LIBLZMA */
@@ -807,6 +808,7 @@ typedef uint64_t uintmax_t;
 
 /* Define to 1 if you have the <lz4.h> header file. */
 /* #undef HAVE_LZ4_H */
+#define HAVE_LZ4_H 1
 
 /* Define to 1 if you have the <lzmadec.h> header file. */
 /* #undef HAVE_LZMADEC_H */
@@ -817,6 +819,7 @@ typedef uint64_t uintmax_t;
 
 /* Define to 1 if you have a working `lzma_stream_encoder_mt' function. */
 /* #undef HAVE_LZMA_STREAM_ENCODER_MT */
+#define HAVE_LZMA_STREAM_ENCODER_MT 1
 
 /* Define to 1 if you have the <lzo/lzo1x.h> header file. */
 /* #undef HAVE_LZO_LZO1X_H */
