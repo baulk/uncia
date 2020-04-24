@@ -28,6 +28,9 @@ set(BROTLI_SOURCES
     brotli/enc/utf8_util.c)
 
 add_library(brotli STATIC ${BROTLI_SOURCES})
+target_include_directories(brotli PRIVATE brotli/include)
+
+set(ARCHIVE_INC)
 list(APPEND ARCHIVE_INC brotli/include)
 
 add_library(
@@ -133,8 +136,15 @@ list(APPEND LZMA_DEF -DLZMA_API_STATIC)
 target_include_directories(lzma PRIVATE ${LZMA_INC})
 target_compile_definitions(lzma PRIVATE ${LZMA_DEF})
 
-set(ARCHIVE_INC)
 list(APPEND ARCHIVE_INC liblzma/api)
+
+add_library(lz4 STATIC 
+  lz4/lz4.c
+  lz4/lz4frame.c
+  lz4/lz4hc.c
+  lz4/xxhash.c
+)
+list(APPEND ARCHIVE_INC lz4)
 
 # zlib
 set(ZLIB_INC)
@@ -179,7 +189,7 @@ file(GLOB ZSTD_COMPRESS_SOURCES zstd/compress/*.c)
 file(GLOB ZSTD_DECOMPRESS_SOURCES zstd/decompress/*.c)
 file(GLOB ZSTD_DICTBUILDER_SOURCES zstd/dictBuilder/*.c)
 file(GLOB ZSTD_DEPRECATED_SOURCES zstd/deprecated/*.c)
-list(APPEND ARCHIVE_INC zstd)
+
 
 add_library(
   zstd STATIC
@@ -200,7 +210,8 @@ set_property(
   TARGET zstd
   APPEND
   PROPERTY COMPILE_DEFINITIONS "ZSTD_MULTITHREAD")
-target_include_directories(zstd PRIVATE zstd/common zstd/legacy)
+target_include_directories(zstd PRIVATE zstd zstd/common zstd/legacy)
+list(APPEND ARCHIVE_INC zstd)
 
 set(INCLUDE_HEADERS libarchive/archive.h libarchive/archive_entry.h)
 
@@ -370,10 +381,12 @@ list(APPEND LIBARCHIVE_SOURCES libarchive/archive_blake2s_ref.c)
 # Libarchive is a shared library
 add_library(archive STATIC ${LIBARCHIVE_SOURCES} ${INCLUDE_HEADERS})
 target_include_directories(archive PRIVATE ${ARCHIVE_INC})
+message(STATUS "ARCHIVE_INC ${ARCHIVE_INC}")
 target_link_libraries(
   archive
   brotli
   bzip2
   lzma
+  lz4
   zlib
   zstd)
