@@ -184,7 +184,16 @@ endif()
 
 add_library(zlib STATIC ${ZLIB_SOURCES})
 
-file(GLOB ZSTD_COMMON_SOURCES zstd/common/*.c)
+set(ZSTD_COMMON_SOURCES
+  zstd/common/debug.c
+  zstd/common/entropy_common.c
+  zstd/common/error_private.c
+  zstd/common/fse_decompress.c
+  zstd/common/pool.c
+  zstd/common/threading.c
+  zstd/common/zstd_common.c
+)
+
 file(GLOB ZSTD_COMPRESS_SOURCES zstd/compress/*.c)
 file(GLOB ZSTD_DECOMPRESS_SOURCES zstd/decompress/*.c)
 file(GLOB ZSTD_DICTBUILDER_SOURCES zstd/dictBuilder/*.c)
@@ -206,7 +215,7 @@ add_library(
   zstd/legacy/zstd_v06.c
   zstd/legacy/zstd_v07.c)
 
-target_compile_definitions(zstd PRIVATE XXH_NAMESPACE=_zstd_)
+target_compile_definitions(zstd PRIVATE XXH_INLINE_ALL)
 target_compile_definitions(zstd PRIVATE ZSTD_MULTITHREAD)
 target_include_directories(zstd PRIVATE zstd zstd/common zstd/legacy)
 list(APPEND ARCHIVE_INC zstd)
