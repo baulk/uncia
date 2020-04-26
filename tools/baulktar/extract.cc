@@ -7,8 +7,8 @@
 #include <archive.h>
 #include <archive_entry.h>
 // We will change
-#include <archive_private.h>
-#include <archive_entry_private.h>
+//#include <archive_private.h>
+//#include <archive_entry_private.h>
 
 namespace baulktar {
 std::wstring BaulkWorkDir() {

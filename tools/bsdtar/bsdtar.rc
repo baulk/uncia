@@ -1,9 +1,10 @@
 // bsdtar resources
 #include "windows.h"
+#include "version.h"
 
 VS_VERSION_INFO VERSIONINFO
-FILEVERSION 3, 4, 3, 0
-PRODUCTVERSION 3, 4, 3, 0
+FILEVERSION BSDTAR_MAJOR_VERSION, BSDTAR_MINOR_VERSION, BSDTAR_PATCH_VERSION, BSDTAR_BUILD_NUMBER
+PRODUCTVERSION BSDTAR_MAJOR_VERSION, BSDTAR_MINOR_VERSION, BSDTAR_PATCH_VERSION, BSDTAR_BUILD_NUMBER
 FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
 FILEFLAGS 0x1L
@@ -19,13 +20,13 @@ BEGIN
 BLOCK "000904b0"
 BEGIN
 VALUE "CompanyName", L"No company name"
-VALUE "FileDescription", L"bsdtar archive tool"
-VALUE "FileVersion", L"3.4.3"
+VALUE "FileDescription", BSDATR_FILE_DESCRIPTION
+VALUE "FileVersion", BSDTAR_VERSION_FULL
 VALUE "InternalName", L"bsdtar.exe"
-VALUE "LegalCopyright", L"Copyright \xA9 libarchive authors"
+VALUE "LegalCopyright", BSDTAR_COPYRIGHT
 VALUE "OriginalFilename", L"bsdtar.exe"
 VALUE "ProductName", L"bsdtar archive tool"
-VALUE "ProductVersion", L"3.4.3"
+VALUE "ProductVersion", BSDTAR_VERSION_FULL
 END
 END
 BLOCK "VarFileInfo"
