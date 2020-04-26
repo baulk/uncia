@@ -1,19 +1,19 @@
 # bsdtar
 set(BSDTAR_SOURCES
-  bsdtar.c
-  cmdline.c
-  creation_set.c
-  read.c
-  subst.c
-  util.c
-  write.c
-  err.c
-  line_reader.c
-  passphrase.c
-  bsdtar.rc)
+    bsdtar.c
+    cmdline.c
+    creation_set.c
+    read.c
+    subst.c
+    util.c
+    write.c
+    err.c
+    line_reader.c
+    passphrase.c
+    bsdtar.rc)
 
 if(WIN32 AND NOT CYGWIN)
-list(APPEND BSDTAR_SOURCES bsdtar_windows.c)
+  list(APPEND BSDTAR_SOURCES bsdtar_windows.c)
 endif()
 
 add_executable(bsdtar ${BSDTAR_SOURCES} bsdtar.manifest)
