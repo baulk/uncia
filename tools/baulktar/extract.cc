@@ -91,8 +91,9 @@ int BaulkExtract(std::wstring_view file, std::wstring_view out) {
   if (a == nullptr) {
     return 1;
   }
-  int flags = ARCHIVE_EXTRACT_TIME | ARCHIVE_EXTRACT_PERM |
-              ARCHIVE_EXTRACT_SECURE_NODOTDOT | ARCHIVE_EXTRACT_UNLINK |
+  int flags = ARCHIVE_EXTRACT_SECURE_NODOTDOT |
+              ARCHIVE_EXTRACT_SECURE_SYMLINKS | ARCHIVE_EXTRACT_UNLINK |
+              ARCHIVE_EXTRACT_TIME | ARCHIVE_EXTRACT_PERM |
               ARCHIVE_EXTRACT_ACL | ARCHIVE_EXTRACT_FFLAGS;
   auto ext = archive_write_disk_new();
   archive_write_disk_set_options(ext, flags);
