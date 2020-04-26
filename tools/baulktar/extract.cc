@@ -118,7 +118,8 @@ int BaulkExtract(std::wstring_view file, std::wstring_view out) {
       break;
     }
     if (r < ARCHIVE_OK) {
-      bela::FPrintF(stderr, L"%s\n", archive_error_string(a));
+      bela::FPrintF(stderr, L"archive_read_next_header: %s\n",
+                    archive_error_string(a));
       return 1;
     }
     if (r < ARCHIVE_WARN) {
@@ -133,11 +134,13 @@ int BaulkExtract(std::wstring_view file, std::wstring_view out) {
     }
     r = archive_write_header(ext, entry);
     if (r != ARCHIVE_OK) {
-      break;
+      bela::FPrintF(stderr, L"archive_write_header: %s\n",
+                    archive_error_string(a));
+      return 1;
     }
     r = copy_data(a, ext);
     if (r != ARCHIVE_OK) {
-      break;
+      return 1;
     }
   }
   if (!baulktar::IsDebugMode) {
