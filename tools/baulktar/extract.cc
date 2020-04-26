@@ -6,9 +6,7 @@
 #include <bela/stdwriter.hpp>
 #include <archive.h>
 #include <archive_entry.h>
-// We will change
-//#include <archive_private.h>
-//#include <archive_entry_private.h>
+#include "baulktar.hpp"
 
 namespace baulktar {
 std::wstring BaulkWorkDir() {
@@ -46,39 +44,62 @@ std::wstring MakeDestination(std::wstring_view file, std::wstring_view out) {
   return BaulkWorkDir();
 }
 
-static int copy_data(struct archive *ar, HANDLE FileHandle) {
+static int copy_data(struct archive *ar, struct archive *aw) {
   int r;
   const void *buff;
   size_t size;
-  la_int64_t offset;
-  DWORD dwBytes = 0;
+  int64_t offset;
+
   for (;;) {
     if (r = archive_read_data_block(ar, &buff, &size, &offset);
         r == ARCHIVE_EOF) {
       return ARCHIVE_OK;
     }
-    if (r < ARCHIVE_OK) {
+    if (r != ARCHIVE_OK) {
+      bela::FPrintF(stderr, L"archive_read_data_block: \x1b[31m%s\x1b[0m\n",
+                    archive_error_string(ar));
       return r;
     }
-    //archive_write_data_block()
-    if (WriteFile(FileHandle, buff, static_cast<DWORD>(size), &dwBytes,
-                  nullptr) != TRUE) {
-      return ARCHIVE_FATAL;
+    r = archive_write_data_block(aw, buff, size, offset);
+    if (r != ARCHIVE_OK) {
+      bela::FPrintF(stderr, L"archive_write_data_block: \x1b[31m%s\x1b[0m\n",
+                    archive_error_string(ar));
+      return r;
     }
   }
-  return ARCHIVE_OK;
 }
+
 // https://github.com/libarchive/libarchive/wiki/Filenames
 
 int BaulkExtract(std::wstring_view file, std::wstring_view out) {
   auto src = bela::PathAbsolute(file);
   auto destination = MakeDestination(src, out);
+  if (!bela::PathExists(destination) &&
+      CreateDirectoryW(destination.data(), nullptr) != TRUE) {
+    auto ec = bela::make_system_error_code();
+    bela::FPrintF(stderr, L"unable mkdir %s\n", ec.message);
+    return 1;
+  }
+  if (SetCurrentDirectoryW(destination.data()) != TRUE) {
+    auto ec = bela::make_system_error_code();
+    bela::FPrintF(stderr, L"unable chdir %s\n", ec.message);
+    return 1;
+  }
   auto a = archive_read_disk_new();
   if (a == nullptr) {
     return 1;
   }
+  int flags = ARCHIVE_EXTRACT_TIME | ARCHIVE_EXTRACT_PERM |
+              ARCHIVE_EXTRACT_ACL | ARCHIVE_EXTRACT_FFLAGS;
   auto ext = archive_write_disk_new();
-  auto closer = bela::finally([&] { archive_read_free(a); });
+  archive_write_disk_set_options(ext, flags);
+  archive_write_disk_set_standard_lookup(ext);
+  auto closer = bela::finally([&] {
+    archive_read_close(a);
+    archive_read_free(a);
+    archive_write_close(ext);
+    archive_write_free(ext);
+  });
   archive_read_support_compression_all(a);
   archive_read_support_filter_all(a);
   archive_read_support_format_all(a);
@@ -86,7 +107,6 @@ int BaulkExtract(std::wstring_view file, std::wstring_view out) {
   if (archive_read_open_filename_w(a, src.data(), 16384) != ARCHIVE_OK) {
     return 1;
   }
-  // archive_write_disk_set_options()
   archive_entry *entry = nullptr;
   for (;;) {
     auto r = archive_read_next_header(a, &entry);
@@ -95,14 +115,29 @@ int BaulkExtract(std::wstring_view file, std::wstring_view out) {
     }
     if (r < ARCHIVE_OK) {
       bela::FPrintF(stderr, L"%s\n", archive_error_string(a));
+      return 1;
     }
     if (r < ARCHIVE_WARN) {
       return 1;
     }
-    auto p = archive_entry_pathname(entry);
-    //archive_entry_copy_pathname_w()
-    // archive_entry_pathname_w
-    // archive_entry_pathname_utf8
+    if (baulktar::IsDebugMode) {
+      bela::FPrintF(stderr, L"\x1b[33mx %s\x1b[0,\n",
+                    archive_entry_pathname_w(entry));
+    } else {
+      bela::FPrintF(stderr, L"\x1b[2k\r\x1b[33mx %s\x1b[0m",
+                    archive_entry_pathname_w(entry));
+    }
+    r = archive_write_header(ext, entry);
+    if (r != ARCHIVE_OK) {
+      break;
+    }
+    r = copy_data(a, ext);
+    if (r != ARCHIVE_OK) {
+      break;
+    }
+  }
+  if (!baulktar::IsDebugMode) {
+    bela::FPrintF(stderr, L"\n");
   }
   return 0;
 }
