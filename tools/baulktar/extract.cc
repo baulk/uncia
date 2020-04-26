@@ -70,10 +70,12 @@ static int copy_data(struct archive *ar, struct archive *aw) {
 }
 
 // https://github.com/libarchive/libarchive/wiki/Filenames
-
+// Extract archive
 int BaulkExtract(std::wstring_view file, std::wstring_view out) {
   auto src = bela::PathAbsolute(file);
   auto destination = MakeDestination(src, out);
+  // The bsdtar extract file does not support setting the output directory, here
+  // to improve
   if (!bela::PathExists(destination) &&
       CreateDirectoryW(destination.data(), nullptr) != TRUE) {
     auto ec = bela::make_system_error_code();
@@ -90,6 +92,7 @@ int BaulkExtract(std::wstring_view file, std::wstring_view out) {
     return 1;
   }
   int flags = ARCHIVE_EXTRACT_TIME | ARCHIVE_EXTRACT_PERM |
+              ARCHIVE_EXTRACT_SECURE_NODOTDOT | ARCHIVE_EXTRACT_UNLINK |
               ARCHIVE_EXTRACT_ACL | ARCHIVE_EXTRACT_FFLAGS;
   auto ext = archive_write_disk_new();
   archive_write_disk_set_options(ext, flags);
