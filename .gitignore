@@ -1,5 +1,6 @@
 .vscode/
 /build/
+/build.win32/
 /build.arm64/
 *.pdb
 *.exe
