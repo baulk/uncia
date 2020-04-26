@@ -25,3 +25,6 @@ add_executable(wintar ${BSDTAR_SOURCES} bsdtar.utf8.manifest)
 target_include_directories(wintar PRIVATE ../../lib/libarchive)
 target_compile_definitions(wintar PRIVATE LIBARCHIVE_STATIC=1 FORCE_ENABLE_UTF8=1)
 target_link_libraries(wintar archive Bcrypt)
+
+install(TARGETS bsdtar DESTINATION bin)
+install(TARGETS wintar DESTINATION bin)
