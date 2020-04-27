@@ -2,6 +2,8 @@
 
 Tar's reflection and reconstruction
 
+[![Master Branch Status](https://github.com/baulk/baulktar/workflows/CI/badge.svg)](https://github.com/baulk/baulktar/actions)
+
 ## BaulkTar
 
 Archive tool based on modern C++17
