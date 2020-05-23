@@ -3,7 +3,6 @@
 #include <bela/path.hpp>
 #include <bela/match.hpp>
 #include <bela/strcat.hpp>
-#include <bela/stdwriter.hpp>
 #include <archive.h>
 #include <archive_entry.h>
 #include "baulktar.hpp"

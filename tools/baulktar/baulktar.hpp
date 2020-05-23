@@ -1,7 +1,7 @@
 //
 #ifndef BAULKTAR_HPP
 #define BAULKTAR_HPP
-#include <bela/stdwriter.hpp>
+#include <bela/terminal.hpp>
 #include <bela/strcat.hpp>
 
 namespace baulktar {
@@ -22,7 +22,7 @@ bela::ssize_t DbgPrint(const wchar_t *fmt, Args... args) {
     str.pop_back();
   }
   str.append(L"\x1b[0m\n");
-  return bela::FileWrite(stderr, str);
+  return bela::terminal::WriteAuto(stderr, str);
 }
 inline bela::ssize_t DbgPrint(const wchar_t *fmt) {
   if (!IsDebugMode) {
@@ -32,8 +32,8 @@ inline bela::ssize_t DbgPrint(const wchar_t *fmt) {
   if (!msg.empty() && msg.back() == '\n') {
     msg.remove_suffix(1);
   }
-  return bela::FileWrite(stderr,
-                         bela::StringCat(L"\x1b[33m", msg, L"\x1b[0m\n"));
+  return bela::terminal::WriteAuto(
+      stderr, bela::StringCat(L"\x1b[33m", msg, L"\x1b[0m\n"));
 }
 
 template <typename... Args>
@@ -49,7 +49,7 @@ bela::ssize_t DbgPrintEx(char32_t prefix, const wchar_t *fmt, Args... args) {
     str.pop_back();
   }
   str.append(L"\x1b[0m\n");
-  return bela::FileWrite(stderr, str);
+  return bela::terminal::WriteAuto(stderr, str);
 }
 inline bela::ssize_t DbgPrintEx(char32_t prefix, const wchar_t *fmt) {
   if (!IsDebugMode) {
@@ -59,7 +59,7 @@ inline bela::ssize_t DbgPrintEx(char32_t prefix, const wchar_t *fmt) {
   if (!msg.empty() && msg.back() == '\n') {
     msg.remove_suffix(1);
   }
-  return bela::FileWrite(
+  return bela::terminal::WriteAuto(
       stderr, bela::StringCat(L"\x1b[32m", prefix, L" ", msg, L"\x1b[0m\n"));
 }
 
