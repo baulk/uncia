@@ -303,6 +303,7 @@ set(LIBARCHIVE_SOURCES
     libarchive/archive_read_support_filter_uu.c
     libarchive/archive_read_support_filter_xz.c
     libarchive/archive_read_support_filter_zstd.c
+    libarchive/archive_read_support_filter_by_code.c
     libarchive/archive_read_support_format_7zip.c
     libarchive/archive_read_support_format_all.c
     libarchive/archive_read_support_format_ar.c

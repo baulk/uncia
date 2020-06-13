@@ -37,7 +37,7 @@
  */
 /* Note: Compiler will complain if this does not match archive_entry.h! */
 #ifndef ARCHIVE_VERSION_NUMBER
-#define	ARCHIVE_VERSION_NUMBER 3004003
+#define	ARCHIVE_VERSION_NUMBER 3004004
 #endif
 
 #include <sys/stat.h>
@@ -157,7 +157,7 @@ __LA_DECL int		archive_version_number(void);
 /*
  * Textual name/version of the library, useful for version displays.
  */
-#define	ARCHIVE_VERSION_ONLY_STRING "3.4.3dev"
+#define	ARCHIVE_VERSION_ONLY_STRING "3.4.4dev"
 #define	ARCHIVE_VERSION_STRING "libarchive " ARCHIVE_VERSION_ONLY_STRING
 __LA_DECL const char *	archive_version_string(void);
 
@@ -420,6 +420,7 @@ __LA_DECL int archive_read_support_compression_xz(struct archive *)
 #endif
 
 __LA_DECL int archive_read_support_filter_all(struct archive *);
+__LA_DECL int archive_read_support_filter_by_code(struct archive *, int);
 __LA_DECL int archive_read_support_filter_bzip2(struct archive *);
 __LA_DECL int archive_read_support_filter_compress(struct archive *);
 __LA_DECL int archive_read_support_filter_gzip(struct archive *);
