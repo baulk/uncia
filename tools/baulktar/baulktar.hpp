@@ -2,7 +2,6 @@
 #ifndef BAULKTAR_HPP
 #define BAULKTAR_HPP
 #include <bela/terminal.hpp>
-#include <bela/strcat.hpp>
 
 namespace baulktar {
 extern bool IsDebugMode;
