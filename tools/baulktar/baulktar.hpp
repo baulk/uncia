@@ -8,7 +8,7 @@ extern bool IsDebugMode;
 extern bool IsForceMode;
 // DbgPrint added newline
 template <typename... Args>
-bela::ssize_t DbgPrint(const wchar_t *fmt, Args... args) {
+bela::ssize_t DbgPrint(const wchar_t *fmt, Args &... args) {
   if (!IsDebugMode) {
     return 0;
   }
@@ -36,7 +36,7 @@ inline bela::ssize_t DbgPrint(const wchar_t *fmt) {
 }
 
 template <typename... Args>
-bela::ssize_t DbgPrintEx(char32_t prefix, const wchar_t *fmt, Args... args) {
+bela::ssize_t DbgPrintEx(char32_t prefix, const wchar_t *fmt, Args &... args) {
   if (!IsDebugMode) {
     return 0;
   }
