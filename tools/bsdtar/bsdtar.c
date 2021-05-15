@@ -154,15 +154,6 @@ static char const * const vcs_files[] = {
 int
 main(int argc, char **argv)
 {
-#ifdef _WIN32
-    DWORD codepage = GetACP();
-    if(GetConsoleCP() != codepage){
-		SetConsoleCP(codepage);
-		SetConsoleOutputCP(codepage);
-	}
-
-#endif
-
 	struct bsdtar		*bsdtar, bsdtar_storage;
 	int			 opt, t;
 	char			 compression, compression2;
