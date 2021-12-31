@@ -108,7 +108,20 @@ template <class _RawTy>
       _Value >>= 5;
     } while (_Value != 0);
     break;
-
+  case 3:
+    [[fallthrough]];
+  case 5:
+    [[fallthrough]];
+  case 6:
+    [[fallthrough]];
+  case 7:
+    [[fallthrough]];
+  case 9:
+    do {
+      *--_RNext = static_cast<char>('0' + _Value % _Base);
+      _Value = static_cast<_Unsigned>(_Value / _Base);
+    } while (_Value != 0);
+    break;
   default:
     do {
       *--_RNext = _Charconv_digits[_Value % _Base];
@@ -180,6 +193,7 @@ to_chars_result to_chars(wchar_t *_First, wchar_t *_Last, bool _Value, int _Base
 struct from_chars_result {
   const wchar_t *ptr;
   std::errc ec;
+  [[nodiscard]] friend bool operator==(const from_chars_result &, const from_chars_result &) = default;
 };
 
 [[nodiscard]] inline unsigned char _Digit_from_char(const wchar_t _Ch) noexcept {
@@ -419,31 +433,6 @@ struct _Big_integer_flt {
   return _Xval;
 }
 
-[[nodiscard]] inline _Big_integer_flt _Make_big_integer_flt_u32(const uint32_t _Value) noexcept {
-  _Big_integer_flt _Xval{};
-  _Xval._Mydata[0] = _Value;
-  _Xval._Myused = 1;
-  return _Xval;
-}
-
-[[nodiscard]] inline _Big_integer_flt _Make_big_integer_flt_u64(const uint64_t _Value) noexcept {
-  _Big_integer_flt _Xval{};
-  _Xval._Mydata[0] = static_cast<uint32_t>(_Value);
-  _Xval._Mydata[1] = static_cast<uint32_t>(_Value >> 32);
-  _Xval._Myused = _Xval._Mydata[1] == 0 ? 1u : 2u;
-  return _Xval;
-}
-
-[[nodiscard]] inline _Big_integer_flt _Make_big_integer_flt_power_of_two(const uint32_t _Power) noexcept {
-  const uint32_t _Element_index = _Power / _Big_integer_flt::_Element_bits;
-  const uint32_t _Bit_index = _Power % _Big_integer_flt::_Element_bits;
-
-  _Big_integer_flt _Xval{};
-  memset(_Xval._Mydata, 0, _Element_index * sizeof(uint32_t));
-  _Xval._Mydata[_Element_index] = 1u << _Bit_index;
-  _Xval._Myused = _Element_index + 1;
-  return _Xval;
-}
 
 [[nodiscard]] inline uint32_t _Bit_scan_reverse(const uint32_t _Value) noexcept {
   unsigned long _Index; // Intentionally uninitialized for better codegen
@@ -462,7 +451,7 @@ struct _Big_integer_flt {
   if (_BitScanReverse64(&_Index, _Value)) {
     return _Index + 1;
   }
-#else // ^^^ 64-bit ^^^ / vvv 32-bit vvv
+#else  // ^^^ 64-bit ^^^ / vvv 32-bit vvv
   uint32_t _Ui32 = static_cast<uint32_t>(_Value >> 32);
 
   if (_BitScanReverse(&_Index, _Ui32)) {
@@ -971,7 +960,14 @@ get<1>(indices[i]), get<2>(indices[i]));
 
     _Numerator._Mydata[1] = static_cast<uint32_t>(_Uu >> 32);
     _Numerator._Mydata[0] = static_cast<uint32_t>(_Uu);
-    _Numerator._Myused = _Numerator._Mydata[1] > 0 ? 2u : 1u;
+    if (_Numerator._Mydata[1] > 0) {
+        _Numerator._Myused = 2u;
+    } else if (_Numerator._Mydata[0] > 0) {
+        _Numerator._Myused = 1u;
+    } else {
+        _Numerator._Myused = 0u;
+    }
+
     return _Quotient;
   }
 

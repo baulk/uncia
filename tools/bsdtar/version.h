@@ -38,6 +38,6 @@
 #define BSDATR_FILE_DESCRIPTION L"wintar - UTF-8 mode bsdtar archive tool"
 #endif
 
-#define BSDTAR_COPYRIGHT L"Copyright \xA9 2020, libarchive and baulk contributors."
+#define BSDTAR_COPYRIGHT L"Copyright \xA9 2022, libarchive and baulk contributors."
 
 #endif

@@ -1,4 +1,4 @@
-# Author: Force Charlie Copyright (C) 2020. Force Charlie. All Rights Reserved.
+# Author: Force Charlie Copyright (C) 2022. Force Charlie. All Rights Reserved.
 cmake_minimum_required(VERSION 3.15)
 project(BaulkTar)
 
@@ -53,8 +53,8 @@ else()
 endif()
 
 set(BAULKTAR_VERSION_MAJOR 1)
-set(BAULKTAR_VERSION_MINOR 0)
-set(BAULKTAR_VERSION_PATCH 4)
+set(BAULKTAR_VERSION_MINOR 1)
+set(BAULKTAR_VERSION_PATCH 0)
 set(PACKAGE_VERSION "${BAULKTAR_VERSION_MAJOR}.${BAULKTAR_VERSION_MINOR}.${BAULKTAR_VERSION_PATCH}")
 
 set(CPACK_PACKAGE_NAME "BaulkTar")

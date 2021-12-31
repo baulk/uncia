@@ -11,9 +11,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "Demangle.h"
-#include "StringView.h"
-#include "Utility.h"
+#include "llvm/Demangle/Demangle.h"
+#include "llvm/Demangle/StringView.h"
+#include "llvm/Demangle/Utility.h"
 
 #include <algorithm>
 #include <cassert>
@@ -23,7 +23,7 @@
 
 using namespace llvm;
 
-using llvm::itanium_demangle::OutputStream;
+using llvm::itanium_demangle::OutputBuffer;
 using llvm::itanium_demangle::StringView;
 using llvm::itanium_demangle::SwapAndRestore;
 
@@ -88,7 +88,7 @@ class Demangler {
 
 public:
   // Demangled output.
-  OutputStream Output;
+  OutputBuffer Output;
 
   Demangler(size_t MaxRecursionLevel = 500);
 
@@ -147,16 +147,16 @@ private:
 
 } // namespace
 
-char *llvm::rustDemangle(const std::string_view MangledName, char *Buf, size_t *N,
+char *llvm::rustDemangle(const char *MangledName, char *Buf, size_t *N,
                          int *Status) {
-  if (MangledName.empty() || (Buf != nullptr && N == nullptr)) {
+  if (MangledName == nullptr || (Buf != nullptr && N == nullptr)) {
     if (Status != nullptr)
       *Status = demangle_invalid_args;
     return nullptr;
   }
 
   // Return early if mangled name doesn't look like a Rust symbol.
-  StringView Mangled(MangledName.data(),MangledName.size());
+  StringView Mangled(MangledName);
   if (!Mangled.startsWith("_R")) {
     if (Status != nullptr)
       *Status = demangle_invalid_mangled_name;
@@ -164,7 +164,7 @@ char *llvm::rustDemangle(const std::string_view MangledName, char *Buf, size_t *
   }
 
   Demangler D;
-  if (!initializeOutputStream(nullptr, nullptr, D.Output, 1024)) {
+  if (!initializeOutputBuffer(nullptr, nullptr, D.Output, 1024)) {
     if (Status != nullptr)
       *Status = demangle_memory_alloc_failure;
     return nullptr;
@@ -1094,7 +1094,7 @@ static inline bool decodePunycodeDigit(char C, size_t &Value) {
   return false;
 }
 
-static void removeNullBytes(OutputStream &Output, size_t StartIdx) {
+static void removeNullBytes(OutputBuffer &Output, size_t StartIdx) {
   char *Buffer = Output.getBuffer();
   char *Start = Buffer + StartIdx;
   char *End = Buffer + Output.getCurrentPosition();
@@ -1138,7 +1138,7 @@ static inline bool encodeUTF8(size_t CodePoint, char *Output) {
 
 // Decodes string encoded using punycode and appends results to Output.
 // Returns true if decoding was successful.
-static bool decodePunycode(StringView Input, OutputStream &Output) {
+static bool decodePunycode(StringView Input, OutputBuffer &Output) {
   size_t OutputSize = Output.getCurrentPosition();
   size_t InputIdx = 0;
 
