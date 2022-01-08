@@ -1211,6 +1211,8 @@ typedef uint64_t uintmax_t;
 /* #undef HAVE_ZSTD_H */
 #define HAVE_ZSTD_H 1
 
+#define HAVE_LIBZSTD_COMPRESSOR 1
+
 /* Define to 1 if you have the `_ctime64_s' function. */
 #define HAVE__CTIME64_S 1
 
