@@ -9,3 +9,4 @@ if(UNCIA_ENABLE_LTO)
 endif()
 
 target_link_libraries(uncia archive belawin)
+install(TARGETS uncia DESTINATION bin)
