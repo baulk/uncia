@@ -1,16 +1,13 @@
 #include <string_view>
 #include <bela/parseargv.hpp>
 #include <archive.h>
-#include "baulktar.hpp"
-#include "version.h"
+#include "uncia.hpp"
+#include <version.hpp>
 
-namespace baulktar {
+namespace uncia {
 bool IsDebugMode = false;
 
-void Version() {
-  bela::FPrintF(stderr, L"baulktar %s %s\n", BAULKTAR_VERSION_FULL,
-                archive_version_details());
-}
+void Version() { bela::FPrintF(stderr, L"uncia %s %s\n", BAULKTAR_VERSION, archive_version_details()); }
 // -x --extract
 // -o --output
 // -h --help
@@ -21,10 +18,10 @@ void Version() {
 // -z, -j, -J, --lzma --zstd
 // -l --list
 // --exclude
-} // namespace baulktar
+} // namespace uncia
 
 int wmain(int argc, wchar_t **argv) {
   //
-  baulktar::Version();
+  uncia::Version();
   return 0;
 }

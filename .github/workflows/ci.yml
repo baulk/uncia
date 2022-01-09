@@ -20,13 +20,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        baulktar_target: [baulktar-win64, baulktar-win32, baulktar-arm64]
+        BAULKTAR_target: [baulktar-win64, baulktar-win32, baulktar-arm64]
         include:
-          - baulktar_target: baulktar-win64
+          - BAULKTAR_target: baulktar-win64
             short_target: win64
-          - baulktar_target: baulktar-win32
+          - BAULKTAR_target: baulktar-win32
             short_target: win32
-          - baulktar_target: baulktar-arm64
+          - BAULKTAR_target: baulktar-arm64
             short_target: arm64
     steps:
       - uses: lukka/get-cmake@latest

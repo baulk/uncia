@@ -4,9 +4,9 @@
 #include <bela/match.hpp>
 #include <archive.h>
 #include <archive_entry.h>
-#include "baulktar.hpp"
+#include "uncia.hpp"
 
-namespace baulktar {
+namespace uncia {
 std::wstring BaulkWorkDir() {
   DWORD dwlen = MAX_PATH;
   std::wstring buf;
@@ -123,7 +123,7 @@ int BaulkExtract(std::wstring_view file, std::wstring_view out) {
     if (r < ARCHIVE_WARN) {
       return 1;
     }
-    if (baulktar::IsDebugMode) {
+    if (IsDebugMode) {
       bela::FPrintF(stderr, L"\x1b[33mx %s\x1b[0,\n",
                     archive_entry_pathname_w(entry));
     } else {
@@ -141,9 +141,9 @@ int BaulkExtract(std::wstring_view file, std::wstring_view out) {
       return 1;
     }
   }
-  if (!baulktar::IsDebugMode) {
+  if (!IsDebugMode) {
     bela::FPrintF(stderr, L"\n");
   }
   return 0;
 }
-} // namespace baulktar
+} // namespace uncia

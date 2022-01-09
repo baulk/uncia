@@ -1,4 +1,4 @@
-// bsdtar resources
+// uincia resources
 #include "windows.h"
 #include "revision.h"
 
@@ -19,13 +19,13 @@ BLOCK "StringFileInfo"
 BEGIN
 BLOCK "000904b0"
 BEGIN
-VALUE "CompanyName", L"No company name"
-VALUE "FileDescription", BSDATR_FILE_DESCRIPTION
+VALUE "CompanyName", L"Baulk Contributors"
+VALUE "FileDescription", L"uincia - Simple archive extraction tool"
 VALUE "FileVersion", BAULKTAR_VERSION
-VALUE "InternalName", L"bsdtar.exe"
+VALUE "InternalName", L"uincia.exe"
 VALUE "LegalCopyright", BAULKTAR_COPYRIGHT
-VALUE "OriginalFilename", L"bsdtar.exe"
-VALUE "ProductName", L"bsdtar archive tool"
+VALUE "OriginalFilename", L"uincia.exe"
+VALUE "ProductName", L"uincia - Simple archive extraction tool"
 VALUE "ProductVersion", BAULKTAR_VERSION
 END
 END
