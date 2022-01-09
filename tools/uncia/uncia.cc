@@ -7,7 +7,7 @@
 namespace uncia {
 bool IsDebugMode = false;
 
-void Version() { bela::FPrintF(stderr, L"uncia %s %s\n", BAULKTAR_VERSION, archive_version_details()); }
+void Version() { bela::FPrintF(stderr, L"uncia %s %s\n", UNCIA_VERSION, archive_version_details()); }
 // -x --extract
 // -o --output
 // -h --help

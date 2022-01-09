@@ -1,6 +1,6 @@
 //
-#ifndef BAULKTAR_HPP
-#define BAULKTAR_HPP
+#ifndef UNCIA_HPP
+#define UNCIA_HPP
 #include <bela/terminal.hpp>
 
 namespace uncia {

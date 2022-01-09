@@ -16,24 +16,24 @@ on:
 jobs:
   build:
     name: Build
-    runs-on: windows-latest
+    runs-on: windows-2022
     strategy:
       fail-fast: false
       matrix:
-        BAULKTAR_target: [baulktar-win64, baulktar-win32, baulktar-arm64]
+        UNCIA_target: [uncia-win64, uncia-win32, uncia-arm64]
         include:
-          - BAULKTAR_target: baulktar-win64
+          - UNCIA_target: uncia-win64
             short_target: win64
-          - BAULKTAR_target: baulktar-win32
+          - UNCIA_target: uncia-win32
             short_target: win32
-          - BAULKTAR_target: baulktar-arm64
+          - UNCIA_target: uncia-arm64
             short_target: arm64
     steps:
       - uses: lukka/get-cmake@latest
       - uses: actions/checkout@v2
         with:
           fetch-depth: 1
-      - name: compile-baulktar
+      - name: compile-uncia
         run: pwsh -NoProfile -NoLogo -ExecutionPolicy unrestricted -File "./build.ps1" -Target "${{ matrix.short_target }}"
 
       - name: Package release
@@ -45,7 +45,7 @@ jobs:
           # cleanup zip files
           Remove-Item -Force *.zip
           cpack -G ZIP
-          $obj=Get-FileHash -Algorithm SHA256 BaulkTar*.zip
+          $obj=Get-FileHash -Algorithm SHA256 uncia*.zip
           Split-Path -Leaf $obj.Path
           $obj.Algorithm +":"+$obj.Hash.ToLower()
       - name: Upload release
@@ -53,7 +53,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         with:
           file_glob: true
-          file: build/BaulkTar-*.zip
+          file: build/uncia-*.zip
           tag: ${{ github.ref }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           overwrite: true

@@ -1,18 +1,15 @@
-# BaulkTar
+# Uncia - Simple archive extraction tool
 
-Tar's reflection and reconstruction
+A simple archive extraction tool
 
-[![Master Branch Status](https://github.com/baulk/baulktar/workflows/CI/badge.svg)](https://github.com/baulk/baulktar/actions)
+[![Master Branch Status](https://github.com/baulk/uncia/workflows/CI/badge.svg)](https://github.com/baulk/uncia/actions)
 
-## BaulkTar
+## Uncia
 
-Archive tool based on modern C++17
+Archive tool based on modern C++20
 
-+  C++17 std::filesystem, std::format (C++20 use fmtlib)
++  C++20 std::filesystem, std::format (C++20 use fmtlib)
 
+## wintar
 
-## bsdtar/wintar
-
-bsdtar (libarchive) static build. 
-
-wintar apply Full UTF-8 patch.
+wintar (libarchive) static build. 

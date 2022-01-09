@@ -1,6 +1,6 @@
 ///
-#ifndef BAULKTAR_BAULKREV_HPP
-#define BAULKTAR_BAULKREV_HPP
+#ifndef UNCIA_BAULKREV_HPP
+#define UNCIA_BAULKREV_HPP
 
 #ifdef __has_include
 #if __has_include(<revision.h>)
@@ -8,63 +8,63 @@
 #endif
 #endif
 
-#ifndef BAULKTAR_VERSION_MAJOR
-#define BAULKTAR_VERSION_MAJOR 0
+#ifndef UNCIA_VERSION_MAJOR
+#define UNCIA_VERSION_MAJOR 0
 #endif
 
-#ifndef BAULKTAR_VERSION_MINOR
-#define BAULKTAR_VERSION_MINOR 1
+#ifndef UNCIA_VERSION_MINOR
+#define UNCIA_VERSION_MINOR 1
 #endif
 
-#ifndef BAULKTAR_VERSION_PATCH
-#define BAULKTAR_VERSION_PATCH 0
+#ifndef UNCIA_VERSION_PATCH
+#define UNCIA_VERSION_PATCH 0
 #endif
 
-#ifndef BAULKTAR_VERSION_BUILD
-#define BAULKTAR_VERSION_BUILD 0
+#ifndef UNCIA_VERSION_BUILD
+#define UNCIA_VERSION_BUILD 0
 #endif
 
-#ifndef BAULKTAR_VERSION
-#define BAULKTAR_VERSION L"0.1.0"
+#ifndef UNCIA_VERSION
+#define UNCIA_VERSION L"0.1.0"
 #endif
 
-#ifndef BAULKTAR_REVISION
-#define BAULKTAR_REVISION L"none"
+#ifndef UNCIA_REVISION
+#define UNCIA_REVISION L"none"
 #endif
 
-#ifndef BAULKTAR_REFNAME
-#define BAULKTAR_REFNAME L"none"
+#ifndef UNCIA_REFNAME
+#define UNCIA_REFNAME L"none"
 #endif
 
-#ifndef BAULKTAR_BUILD_TIME
-#define BAULKTAR_BUILD_TIME L"none"
+#ifndef UNCIA_BUILD_TIME
+#define UNCIA_BUILD_TIME L"none"
 #endif
 
-#ifndef BAULKTAR_REMOTE_URL
-#define BAULKTAR_REMOTE_URL L"none"
+#ifndef UNCIA_REMOTE_URL
+#define UNCIA_REMOTE_URL L"none"
 #endif
 
-#ifndef BAULKTAR_APPLINK
-#define BAULKTAR_APPLINK                                                                                                  \
+#ifndef UNCIA_APPLINK
+#define UNCIA_APPLINK                                                                                                  \
   L"For more information about this tool. \nVisit: <a "                                                                \
-  L"href=\"https://github.com/baulk/baulktar\">Baulk</"                                                                   \
+  L"href=\"https://github.com/baulk/uncia\">Baulk</"                                                                   \
   L"a>\nVisit: <a "                                                                                                    \
   L"href=\"https://forcemz.net/\">forcemz.net</a>"
 #endif
 
-#ifndef BAULKTAR_APPLINKE
-#define BAULKTAR_APPLINKE                                                                                                 \
+#ifndef UNCIA_APPLINKE
+#define UNCIA_APPLINKE                                                                                                 \
   L"Ask for help with this issue. \nVisit: <a "                                                                        \
-  L"href=\"https://github.com/baulk/baulktar/issues\">Baulk "                                                             \
+  L"href=\"https://github.com/baulk/uncia/issues\">Baulk "                                                             \
   L"Issues</a>"
 #endif
 
-#ifndef BAULKTAR_APPVERSION
-#define BAULKTAR_APPVERSION L"Version: 0.1.0\nCopyright \xA9 2022, Baulk contributors."
+#ifndef UNCIA_APPVERSION
+#define UNCIA_APPVERSION L"Version: 0.1.0\nCopyright \xA9 2022, Baulk contributors."
 #endif
 
-#ifndef BAULKTAR_COPYRIGHT
-#define BAULKTAR_COPYRIGHT L"Copyright \xA9 2022, Baulk contributors."
+#ifndef UNCIA_COPYRIGHT
+#define UNCIA_COPYRIGHT L"Copyright \xA9 2022, Baulk contributors."
 #endif
 
 #endif

@@ -1,39 +1,33 @@
 // Generate code by cmake, don't modify
-#ifndef BAULKTAR_VERSION_H
-#define BAULKTAR_VERSION_H
+#ifndef UNCIA_VERSION_H
+#define UNCIA_VERSION_H
 
-#define BAULKTAR_VERSION_MAJOR ${BAULKTAR_VERSION_MAJOR}
-#define BAULKTAR_VERSION_MINOR ${BAULKTAR_VERSION_MINOR}
-#define BAULKTAR_VERSION_PATCH ${BAULKTAR_VERSION_PATCH}
-#define BAULKTAR_VERSION_BUILD ${BAULKTAR_VERSION_BUILD}
+#define UNCIA_VERSION_MAJOR ${UNCIA_VERSION_MAJOR}
+#define UNCIA_VERSION_MINOR ${UNCIA_VERSION_MINOR}
+#define UNCIA_VERSION_PATCH ${UNCIA_VERSION_PATCH}
+#define UNCIA_VERSION_BUILD ${UNCIA_VERSION_BUILD}
 
-#define BAULKTAR_VERSION L"${BAULKTAR_VERSION_MAJOR}.${BAULKTAR_VERSION_MINOR}.${BAULKTAR_VERSION_PATCH}"
-#define BAULKTAR_REVISION L"${BAULKTAR_REVISION}"
-#define BAULKTAR_REFNAME L"${BAULKTAR_REFNAME}"
-#define BAULKTAR_BUILD_TIME L"${BAULKTAR_BUILD_TIME}"
-#define BAULKTAR_REMOTE_URL L"${BAULKTAR_REMOTE_URL}"
+#define UNCIA_VERSION L"${UNCIA_VERSION_MAJOR}.${UNCIA_VERSION_MINOR}.${UNCIA_VERSION_PATCH}"
+#define UNCIA_REVISION L"${UNCIA_REVISION}"
+#define UNCIA_REFNAME L"${UNCIA_REFNAME}"
+#define UNCIA_BUILD_TIME L"${UNCIA_BUILD_TIME}"
+#define UNCIA_REMOTE_URL L"${UNCIA_REMOTE_URL}"
 
-#define BAULKTAR_APPLINK                                                                              \
+#define UNCIA_APPLINK                                                                              \
   L"For more information about this tool. \nVisit: <a "                                            \
-  L"href=\"https://github.com/baulk/baulktar\">Baulk</"                                               \
+  L"href=\"https://github.com/baulk/uncia\">Baulk</"                                               \
   L"a>\nVisit: <a "                                                                                \
   L"href=\"https://forcemz.net/\">forcemz.net</a>"
 
-#define BAULKTAR_APPLINKE                                                                             \
+#define UNCIA_APPLINKE                                                                             \
   L"Ask for help with this issue. \nVisit: <a "                                                    \
-  L"href=\"https://github.com/baulk/baulktar/issues\">Baulk "                                         \
+  L"href=\"https://github.com/baulk/uncia/issues\">Baulk "                                         \
   L"Issues</a>"
 
-#define BAULKTAR_APPVERSION                                                                           \
-  L"Version: ${BAULKTAR_VERSION_MAJOR}.${BAULKTAR_VERSION_MINOR}.${BAULKTAR_VERSION_PATCH}\nCopyright "     \
-  L"\xA9 ${BAULKTAR_COPYRIGHT_YEAR}, Baulk contributors."
+#define UNCIA_APPVERSION                                                                           \
+  L"Version: ${UNCIA_VERSION_MAJOR}.${UNCIA_VERSION_MINOR}.${UNCIA_VERSION_PATCH}\nCopyright "     \
+  L"\xA9 ${UNCIA_COPYRIGHT_YEAR}, Baulk contributors."
 
-#define BAULKTAR_COPYRIGHT L"Copyright \xA9 ${BAULKTAR_COPYRIGHT_YEAR}, Baulk contributors."
-
-#ifndef FORCE_ENABLE_UTF8
-#define BSDATR_FILE_DESCRIPTION L"bsdtar archive tool"
-#else
-#define BSDATR_FILE_DESCRIPTION L"wintar - UTF-8 mode bsdtar archive tool"
-#endif
+#define UNCIA_COPYRIGHT L"Copyright \xA9 ${UNCIA_COPYRIGHT_YEAR}, Baulk contributors."
 
 #endif

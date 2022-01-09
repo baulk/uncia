@@ -4,7 +4,7 @@ add_executable(
   uncia
   ${UNCIA_SOURCES})
 
-if(BAULKTAR_ENABLE_LTO)
+if(UNCIA_ENABLE_LTO)
   set_property(TARGET uncia PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
 endif()
 
