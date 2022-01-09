@@ -32,7 +32,16 @@ inline bela::ssize_t DbgPrint(const wchar_t *fmt) {
   }
   return bela::terminal::WriteAuto(stderr, bela::StringCat(L"\x1b[33m* ", msg, L"\x1b[0m\n"));
 }
-
+std::wstring_view PathRemoveExtension(std::wstring_view p);
+inline std::wstring FileDestination(std::wstring_view arfile) {
+  if (auto d = PathRemoveExtension(arfile); d.size() != arfile.size()) {
+    return std::wstring(d);
+  }
+  return bela::StringCat(arfile, L".out");
+}
+bool MakeDir(std::wstring_view path, bela::error_code &ec);
+bool MakeFlattened(std::wstring_view dir, std::wstring_view dest, bela::error_code &ec);
+int Extract(std::wstring_view file, std::wstring_view out);
 } // namespace uncia
 
 #endif

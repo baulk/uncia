@@ -23,5 +23,10 @@ void Version() { bela::FPrintF(stderr, L"uncia %s %s\n", UNCIA_VERSION, archive_
 int wmain(int argc, wchar_t **argv) {
   //
   uncia::Version();
-  return 0;
+  if (argc < 2) {
+    bela::FPrintF(stderr, L"usage %s file\n", argv[0]);
+    return 1;
+  }
+  auto dest = argc > 2 ? std::wstring(argv[2]) : uncia::FileDestination(argv[1]);
+  return uncia::Extract(argv[1], dest);
 }
