@@ -1,8 +1,5 @@
 # btar archives
 
-file(GLOB BZIP2_SOURCES bzip2/*.c)
-add_library(bzip2 STATIC ${BZIP2_SOURCES})
-
 # brotli
 file(
   GLOB
@@ -12,6 +9,12 @@ file(
   brotli/enc/*.c)
 add_library(brotli STATIC ${BROTLI_SOURCES})
 target_include_directories(brotli PRIVATE brotli/include)
+
+# bzip2
+file(GLOB BZIP2_SOURCES bzip2/*.c)
+add_library(bzip2 STATIC ${BZIP2_SOURCES})
+
+add_subdirectory(ced)
 
 # liblzma
 file(
@@ -149,3 +152,23 @@ target_compile_options(
           -wd4457
           -wd4702
           -wd4815)
+
+file(GLOB UNCIA_ARCHIVE_SOURCES *.cc)
+
+add_library(uncia.archive STATIC ${UNCIA_ARCHIVE_SOURCES})
+
+target_include_directories(
+  uncia.archive
+  PRIVATE bzip2
+          zlib
+          liblzma/api
+          zstd
+          brotli/include
+          ced)
+target_compile_options(uncia.archive PRIVATE ${LZMA_DEF})
+target_link_libraries(
+  uncia.archive
+  belawin
+  archive
+  ced
+  advapi32)

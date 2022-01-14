@@ -5,6 +5,7 @@
 #include <archive.h>
 #include <archive_entry.h>
 #include <filesystem>
+#include <archive.hpp>
 #include "uncia.hpp"
 
 namespace uncia {
@@ -71,6 +72,12 @@ int extract_internal(std::wstring_view file, std::wstring_view out) {
     bela::FPrintF(stderr, L"archive_read_open_filename_w: \x1b[31m%s\x1b[0m\n", archive_error_string(a));
     return 1;
   }
+  auto pathNameFn = [&](std::string_view p) -> std::string_view {
+    if (p.size() > out.size() + 1) {
+      return p.substr(out.size() + 1);
+    }
+    return "*";
+  };
   archive_entry *entry = nullptr;
   for (;;) {
     auto r = archive_read_next_header(a, &entry);
@@ -84,10 +91,15 @@ int extract_internal(std::wstring_view file, std::wstring_view out) {
     if (r < ARCHIVE_WARN) {
       return 1;
     }
+    auto filePath = uncia::archive::JoinSanitizePath(out, archive_entry_pathname(entry), false);
+    if (!filePath) {
+      continue;
+    }
+    archive_entry_set_pathname_utf8(entry, filePath->data());
     if (IsDebugMode) {
-      bela::FPrintF(stderr, L"\x1b[33mx %s\x1b[0m\n", archive_entry_pathname_utf8(entry));
+      bela::FPrintF(stderr, L"\x1b[33mx %s\x1b[0m\n", pathNameFn(*filePath));
     } else {
-      bela::FPrintF(stderr, L"\x1b[2K\r\x1b[33mx %s\x1b[0m", archive_entry_pathname_utf8(entry));
+      bela::FPrintF(stderr, L"\x1b[2K\r\x1b[33mx %s\x1b[0m", pathNameFn(*filePath));
     }
     r = archive_write_header(ext, entry);
     if (r != ARCHIVE_OK) {

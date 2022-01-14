@@ -8,5 +8,5 @@ if(UNCIA_ENABLE_LTO)
   set_property(TARGET uncia PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
 endif()
 
-target_link_libraries(uncia archive belawin)
+target_link_libraries(uncia uncia.archive belawin)
 install(TARGETS uncia DESTINATION bin)
