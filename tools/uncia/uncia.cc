@@ -5,7 +5,7 @@
 #include <version.hpp>
 
 namespace uncia {
-bool IsDebugMode = true;
+bool IsDebugMode = false;
 void Version() { bela::FPrintF(stderr, L"uncia %s %s\n", UNCIA_VERSION, archive_version_details()); }
 
 } // namespace uncia

@@ -91,7 +91,7 @@ int extract_internal(std::wstring_view file, std::wstring_view out) {
     if (r < ARCHIVE_WARN) {
       return 1;
     }
-    auto filePath = uncia::archive::JoinSanitizePath(out, archive_entry_pathname(entry), false);
+    auto filePath = uncia::archive::JoinSanitizePath(out, archive_entry_pathname_utf8(entry));
     if (!filePath) {
       continue;
     }
