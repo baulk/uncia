@@ -1,6 +1,7 @@
 #include <string_view>
 #include <bela/parseargv.hpp>
 #include <archive.h>
+#include <archive.hpp>
 #include "uncia.hpp"
 #include <version.hpp>
 
@@ -17,6 +18,6 @@ int wmain(int argc, wchar_t **argv) {
     bela::FPrintF(stderr, L"usage %s file\n", argv[0]);
     return 1;
   }
-  auto dest = argc > 2 ? std::wstring(argv[2]) : uncia::FileDestination(argv[1]);
+  auto dest = argc > 2 ? std::wstring(argv[2]) : uncia::archive::FileDestination(argv[1]);
   return uncia::Extract(argv[1], dest);
 }

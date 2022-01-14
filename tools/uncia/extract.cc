@@ -39,13 +39,8 @@ int extract_internal(std::wstring_view file, std::wstring_view out) {
   // The bsdtar extract file does not support setting the output directory, here
   // to improve
   bela::error_code ec;
-  if (!MakeDir(out, ec)) {
+  if (!uncia::archive::MakeDir(out, ec)) {
     bela::FPrintF(stderr, L"create %s error: \x1b[31m%s\x1b[0m\n", out, ec);
-    return 1;
-  }
-  if (SetCurrentDirectoryW(out.data()) != TRUE) {
-    ec = bela::make_system_error_code();
-    bela::FPrintF(stderr, L"chdir %s error: \x1b[31m%s\x1b[0m\n", out, ec);
     return 1;
   }
   auto a = archive_read_new();
@@ -121,7 +116,7 @@ int Extract(std::wstring_view file, std::wstring_view out) {
     return exitcode;
   }
   bela::error_code ec;
-  if (!MakeFlattened(out, out, ec)) {
+  if (!uncia::archive::MakeFlattened(out, out, ec)) {
     bela::FPrintF(stderr, L"unable MakeFlattened %s\n", ec);
   }
   return 0;
