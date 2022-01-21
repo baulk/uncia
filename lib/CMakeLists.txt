@@ -108,7 +108,7 @@ file(
   zstd/decompress/*.c
   zstd/dictBuilder/*.c)
 add_library(zstd STATIC ${ZSTD_SOURCES})
-target_compile_definitions(zstd PRIVATE XXH_PRIVATE_API ZSTD_MULTITHREAD)
+target_compile_definitions(zstd PRIVATE XXH_PRIVATE_API ZSTD_MULTITHREAD ZSTD_DISABLE_ASM)
 target_include_directories(zstd PRIVATE zstd zstd/common)
 
 # libarchive
