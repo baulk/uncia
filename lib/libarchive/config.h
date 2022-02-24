@@ -1292,7 +1292,7 @@ typedef uint64_t uintmax_t;
 #endif /* SAFE_TO_DEFINE_EXTENSIONS */
 
 /* Version number of package */
-#define VERSION "3.4.2"
+#define VERSION "3.6.0"
 
 /* Number of bits in a file offset, on hosts where this is settable. */
 /* #undef _FILE_OFFSET_BITS */
@@ -1305,15 +1305,15 @@ typedef uint64_t uintmax_t;
 
 /* Define to control Windows SDK version */
 #ifndef NTDDI_VERSION
-#define NTDDI_VERSION 0x06010000
+#define NTDDI_VERSION 0x0A00000B
 #endif // NTDDI_VERSION
 
 #ifndef _WIN32_WINNT
-#define _WIN32_WINNT 0x0601
+#define _WIN32_WINNT 0x0A00
 #endif // _WIN32_WINNT
 
 #ifndef WINVER
-#define WINVER 0x0601
+#define WINVER 0x0A00
 #endif // WINVER
 
 /* Define to empty if `const' does not conform to ANSI C. */
