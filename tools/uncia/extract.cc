@@ -112,11 +112,13 @@ int extract_internal(std::wstring_view file, std::wstring_view out) {
   return 0;
 }
 int Extract(std::wstring_view file, std::wstring_view out) {
-  if (auto exitcode = extract_internal(file, out); exitcode != 0) {
+  auto absFile = bela::PathAbsolute(file);
+  auto absOut = bela::PathAbsolute(out);
+  if (auto exitcode = extract_internal(absFile, absOut); exitcode != 0) {
     return exitcode;
   }
   bela::error_code ec;
-  if (!uncia::archive::MakeFlattened(out, out, ec)) {
+  if (!uncia::archive::MakeFlattened(absOut, absOut, ec)) {
     bela::FPrintF(stderr, L"unable MakeFlattened %s\n", ec);
   }
   return 0;
