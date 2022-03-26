@@ -64,7 +64,7 @@ bool MakeDir(std::wstring_view path, bela::error_code &ec) {
     return true;
   }
   if (!std::filesystem::create_directories(path, e)) {
-    ec = bela::from_std_error_code(e);
+    ec = e;
     return false;
   }
   return true;
@@ -95,6 +95,5 @@ std::wstring_view PathRemoveExtension(std::wstring_view p) {
   }
   return p;
 }
-
 
 } // namespace uncia::archive
