@@ -2,6 +2,7 @@
 #ifndef UNCIA_HPP
 #define UNCIA_HPP
 #include <bela/terminal.hpp>
+#include <bela/str_cat.hpp>
 
 namespace uncia {
 extern bool IsDebugMode;
