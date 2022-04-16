@@ -1,6 +1,11 @@
 # wintar
 
-file(GLOB WINTAR_SOURCES *.c *.rc *.manifest)
+file(
+  GLOB
+  WINTAR_SOURCES
+  *.c
+  *.rc
+  *.manifest)
 
 add_executable(wintar ${WINTAR_SOURCES})
 if(UNCIA_ENABLE_LTO)
