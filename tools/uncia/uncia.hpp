@@ -33,7 +33,6 @@ inline bela::ssize_t DbgPrint(const wchar_t *fmt) {
   }
   return bela::terminal::WriteAuto(stderr, bela::StringCat(L"\x1b[33m* ", msg, L"\x1b[0m\n"));
 }
-int Extract(std::wstring_view file, std::wstring_view out);
 } // namespace uncia
 
 #endif

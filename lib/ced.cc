@@ -1,5 +1,7 @@
 #include <bela/codecvt.hpp>
 #include <bela/path.hpp>
+#include <bela/str_split_narrow.hpp>
+#include <filesystem>
 #include <compact_enc_det/compact_enc_det.h>
 
 namespace uncia::archive {
@@ -74,32 +76,35 @@ inline std::wstring encode_into_native(std::string_view filename, bool always_ut
   return encode_from_codepage(filename, codePageSearch(e));
 }
 
-constexpr bool IsDangerousPath(std::wstring_view p) {
-  constexpr std::wstring_view dangerousPaths[] = {L":$i30:$bitmap", L"$mft"};
-  for (const auto d : dangerousPaths) {
-    if (p.ends_with(d)) {
+inline bool is_harmful_path(std::string_view child_path) {
+  const std::string_view dot = ".";
+  const std::string_view dotdot = "..";
+  std::vector<std::string_view> paths =
+      bela::narrow::StrSplit(child_path, bela::narrow::ByAnyChar("\\/"), bela::narrow::SkipEmpty());
+  int entries = 0;
+  for (auto p : paths) {
+    if (p == dot) {
+      continue;
+    }
+    if (p != dotdot) {
+      entries++;
+      continue;
+    }
+    entries--;
+    if (entries < 0) {
       return true;
     }
   }
-  return false;
+  return entries <= 0;
 }
+bool IsHarmfulPath(std::string_view child_path) { return is_harmful_path(child_path); }
 
-std::optional<std::string> JoinSanitizePath(std::wstring_view root, std::string_view filename, bool always_utf8) {
-  auto fileName = encode_into_native(filename, always_utf8);
-  auto path = bela::PathCat(root, fileName);
-  if (IsDangerousPath(path)) {
-    return std::nullopt; // Windows BUG
-  }
-  if (path.size() <= root.size()) {
+std::optional<std::filesystem::path> JoinSanitizeFsPath(const std::filesystem::path &root, std::string_view child_path,
+                                                        bool always_utf8, std::wstring &encoded_path) {
+  if (is_harmful_path(child_path)) {
     return std::nullopt;
   }
-  if (!path.starts_with(root)) {
-    return std::nullopt;
-  }
-  if (!root.ends_with('/') && !bela::IsPathSeparator(path[root.size()])) {
-    return std::nullopt;
-  }
-  return std::make_optional(bela::encode_into<wchar_t, char>(path));
+  encoded_path = encode_into_native(child_path, always_utf8);
+  return std::make_optional(root / encoded_path);
 }
-
 } // namespace uncia::archive
