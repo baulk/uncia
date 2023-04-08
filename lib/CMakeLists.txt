@@ -15,49 +15,7 @@ file(GLOB BZIP2_SOURCES bzip2/*.c)
 add_library(bzip2 STATIC ${BZIP2_SOURCES})
 
 add_subdirectory(ced)
-
-# liblzma
-file(
-  GLOB
-  LZMA_SOURCES
-  liblzma/common/*.c
-  liblzma/delta/*.c
-  liblzma/simple/*.c)
-
-add_library(
-  lzma STATIC
-  ${LZMA_SOURCES}
-  liblzma/check/check.c
-  liblzma/check/crc32_fast.c
-  liblzma/check/crc32_table.c
-  liblzma/check/crc64_fast.c
-  liblzma/check/crc64_table.c
-  liblzma/check/sha256.c
-  liblzma/lzma/fastpos_table.c
-  liblzma/lzma/lzma2_decoder.c
-  liblzma/lzma/lzma2_encoder.c
-  liblzma/lzma/lzma_decoder.c
-  liblzma/lzma/lzma_encoder.c
-  liblzma/lzma/lzma_encoder_optimum_fast.c
-  liblzma/lzma/lzma_encoder_optimum_normal.c
-  liblzma/lzma/lzma_encoder_presets.c
-  liblzma/lz/lz_decoder.c
-  liblzma/lz/lz_encoder.c
-  liblzma/lz/lz_encoder_mf.c
-  liblzma/rangecoder/price_table.c)
-
-target_include_directories(
-  lzma
-  PRIVATE liblzma
-          liblzma/api
-          liblzma/check
-          liblzma/common
-          liblzma/delta
-          liblzma/lz
-          liblzma/lzma
-          liblzma/rangecoder
-          liblzma/simple)
-target_compile_definitions(lzma PRIVATE -DLZMA_API_STATIC -DHAVE_CONFIG_H)
+add_subdirectory(xz)
 
 add_library(lz4 STATIC lz4/lz4.c lz4/lz4frame.c lz4/lz4hc.c lz4/xxhash.c)
 
@@ -118,7 +76,7 @@ target_include_directories(
   archive
   PRIVATE bzip2
           zlib
-          liblzma/api
+          xz/src/liblzma/api
           lz4
           zstd
           brotli/include)
@@ -127,7 +85,7 @@ target_link_libraries(
   archive
   brotli
   bzip2
-  lzma
+  liblzma
   lz4
   zlib
   zstd)
@@ -161,7 +119,7 @@ target_include_directories(
   uncia.archive
   PRIVATE bzip2
           zlib
-          liblzma/api
+          xz/src/liblzma/api
           zstd
           brotli/include
           ced)
@@ -171,4 +129,5 @@ target_link_libraries(
   belawin
   archive
   ced
+  liblzma
   advapi32)
