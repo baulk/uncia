@@ -1007,9 +1007,11 @@ archive_read_format_rar_read_header(struct archive_read *a,
 
       crc32_val = crc32(0, (const unsigned char *)p + 2, (unsigned)skip - 2);
       if ((crc32_val & 0xffff) != archive_le16dec(p)) {
+#ifndef DONT_FAIL_ON_CRC_ERROR
         archive_set_error(&a->archive, ARCHIVE_ERRNO_FILE_FORMAT,
           "Header CRC error");
         return (ARCHIVE_FATAL);
+#endif
       }
       __archive_read_consume(a, skip);
       break;
@@ -1065,9 +1067,11 @@ archive_read_format_rar_read_header(struct archive_read *a,
 	      skip -= to_read;
       }
       if ((crc32_val & 0xffff) != crc32_expected) {
+#ifndef DONT_FAIL_ON_CRC_ERROR
 	      archive_set_error(&a->archive, ARCHIVE_ERRNO_FILE_FORMAT,
 		  "Header CRC error");
 	      return (ARCHIVE_FATAL);
+#endif
       }
       if (head_type == ENDARC_HEAD)
 	      return (ARCHIVE_EOF);
@@ -1432,9 +1436,11 @@ read_header(struct archive_read *a, struct archive_entry *entry,
   /* File Header CRC check. */
   crc32_val = crc32(crc32_val, h, (unsigned)(header_size - 7));
   if ((crc32_val & 0xffff) != archive_le16dec(rar_header.crc)) {
+#ifndef DONT_FAIL_ON_CRC_ERROR
     archive_set_error(&a->archive, ARCHIVE_ERRNO_FILE_FORMAT,
       "Header CRC error");
     return (ARCHIVE_FATAL);
+#endif
   }
   /* If no CRC error, Go on parsing File Header. */
   p = h;
@@ -1824,12 +1830,8 @@ read_exttime(const char *p, struct rar *rar, const char *endp)
   struct tm *tm;
   time_t t;
   long nsec;
-#if defined(HAVE_LOCALTIME_R) || defined(HAVE__LOCALTIME64_S)
+#if defined(HAVE_LOCALTIME_R) || defined(HAVE_LOCALTIME_S)
   struct tm tmbuf;
-#endif
-#if defined(HAVE__LOCALTIME64_S)
-  errno_t terr;
-  __time64_t tmptime;
 #endif
 
   if (p + 2 > endp)
@@ -1862,15 +1864,10 @@ read_exttime(const char *p, struct rar *rar, const char *endp)
         rem = (((unsigned)(unsigned char)*p) << 16) | (rem >> 8);
         p++;
       }
-#if defined(HAVE_LOCALTIME_R)
+#if defined(HAVE_LOCALTIME_S)
+      tm = localtime_s(&tmbuf, &t) ? NULL : &tmbuf;
+#elif defined(HAVE_LOCALTIME_R)
       tm = localtime_r(&t, &tmbuf);
-#elif defined(HAVE__LOCALTIME64_S)
-      tmptime = t;
-      terr = _localtime64_s(&tmbuf, &tmptime);
-      if (terr)
-        tm = NULL;
-      else
-        tm = &tmbuf;
 #else
       tm = localtime(&t);
 #endif
@@ -1952,9 +1949,11 @@ read_data_stored(struct archive_read *a, const void **buff, size_t *size,
     *size = 0;
     *offset = rar->offset;
     if (rar->file_crc != rar->crc_calculated) {
+#ifndef DONT_FAIL_ON_CRC_ERROR
       archive_set_error(&a->archive, ARCHIVE_ERRNO_FILE_FORMAT,
                         "File CRC error");
       return (ARCHIVE_FATAL);
+#endif
     }
     rar->entry_eof = 1;
     return (ARCHIVE_EOF);
@@ -2045,9 +2044,11 @@ read_data_compressed(struct archive_read *a, const void **buff, size_t *size,
       *size = 0;
       *offset = rar->offset;
       if (rar->file_crc != rar->crc_calculated) {
+#ifndef DONT_FAIL_ON_CRC_ERROR
         archive_set_error(&a->archive, ARCHIVE_ERRNO_FILE_FORMAT,
                           "File CRC error");
         return (ARCHIVE_FATAL);
+#endif
       }
       rar->entry_eof = 1;
       return (ARCHIVE_EOF);
