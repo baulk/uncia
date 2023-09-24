@@ -752,7 +752,8 @@ uLong ZEXPORT deflateBound(strm, sourceLen)
 
     /* if not default parameters, return one of the conservative bounds */
     if (s->w_bits != 15 || s->hash_bits != 8 + 7)
-        return (s->w_bits <= s->hash_bits ? fixedlen : storelen) + wraplen;
+        return (s->w_bits <= s->hash_bits && s->level ? fixedlen : storelen) +
+               wraplen;
 
     /* default settings: return tight bound for that case -- ~0.03% overhead
        plus a small constant */
@@ -1737,10 +1738,10 @@ local block_state deflate_stored(s, flush)
         _tr_stored_block(s, (char *)0, 0L, last);
 
         /* Replace the lengths in the dummy stored block with len. */
-        s->pending_buf[s->pending - 4] = len;
-        s->pending_buf[s->pending - 3] = len >> 8;
-        s->pending_buf[s->pending - 2] = ~len;
-        s->pending_buf[s->pending - 1] = ~len >> 8;
+        s->pending_buf[s->pending - 4] = (Bytef)len;
+        s->pending_buf[s->pending - 3] = (Bytef)(len >> 8);
+        s->pending_buf[s->pending - 2] = (Bytef)~len;
+        s->pending_buf[s->pending - 1] = (Bytef)(~len >> 8);
 
         /* Write the stored block header bytes. */
         flush_pending(s->strm);

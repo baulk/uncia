@@ -1,0 +1,4 @@
+brotli 1.1.0
+liblzma: https://tukaani.org/xz/ 5.4.4
+zstd: https://github.com/facebook/zstd/releases/download/v1.5.5/zstd-1.5.5.tar.gz#lib
+zlib: https://github.com/dotnet/runtime/tree/4101144c8dde177addfb93ac46425fd1a8604f7a/src/native/external/zlib

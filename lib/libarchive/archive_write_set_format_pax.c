@@ -45,15 +45,6 @@ __FBSDID("$FreeBSD: head/lib/libarchive/archive_write_set_format_pax.c 201162 20
 #include "archive_write_private.h"
 #include "archive_write_set_format_private.h"
 
-	/*
-	 * Technically, the mtime field in the ustar header can
-	 * support 33 bits. We are using all of them to keep
-	 * tar/test/test_option_C_mtree.c simple and passing after 2038.
-	 * Platforms that use signed 32-bit time values need to fix
-	 * their handling of timestamps anyway.
-	 */
-#define USTAR_MAX_MTIME 0x1ffffffff
-
 struct sparse_block {
 	struct sparse_block	*next;
 	int		is_hole;
@@ -109,6 +100,7 @@ static int		 has_non_ASCII(const char *);
 static void		 sparse_list_clear(struct pax *);
 static int		 sparse_list_add(struct pax *, int64_t, int64_t);
 static char		*url_encode(const char *in);
+static time_t		 get_ustar_max_mtime(void);
 
 /*
  * Set output format to 'restricted pax' format.
@@ -376,10 +368,12 @@ archive_write_pax_header_xattr(struct pax *pax, const char *encoded_name,
 	struct archive_string s;
 	char *encoded_value;
 
+	if (encoded_name == NULL)
+		return;
+
 	if (pax->flags & WRITE_LIBARCHIVE_XATTR) {
 		encoded_value = base64_encode((const char *)value, value_len);
-
-		if (encoded_name != NULL && encoded_value != NULL) {
+		if (encoded_value != NULL) {
 			archive_string_init(&s);
 			archive_strcpy(&s, "LIBARCHIVE.xattr.");
 			archive_strcat(&s, encoded_name);
@@ -412,17 +406,22 @@ archive_write_pax_header_xattrs(struct archive_write *a,
 
 		archive_entry_xattr_next(entry, &name, &value, &size);
 		url_encoded_name = url_encode(name);
-		if (url_encoded_name != NULL) {
+		if (url_encoded_name == NULL)
+			goto malloc_error;
+		else {
 			/* Convert narrow-character to UTF-8. */
 			r = archive_strcpy_l(&(pax->l_url_encoded_name),
 			    url_encoded_name, pax->sconv_utf8);
 			free(url_encoded_name); /* Done with this. */
 			if (r == 0)
 				encoded_name = pax->l_url_encoded_name.s;
-			else if (errno == ENOMEM) {
-				archive_set_error(&a->archive, ENOMEM,
-				    "Can't allocate memory for Linkname");
-				return (ARCHIVE_FATAL);
+			else if (r == -1)
+				goto malloc_error;
+			else {
+				archive_set_error(&a->archive,
+				    ARCHIVE_ERRNO_MISC,
+				    "Error encoding pax extended attribute");
+				return (ARCHIVE_FAILED);
 			}
 		}
 
@@ -431,6 +430,9 @@ archive_write_pax_header_xattrs(struct archive_write *a,
 
 	}
 	return (ARCHIVE_OK);
+malloc_error:
+	archive_set_error(&a->archive, ENOMEM, "Can't allocate memory");
+	return (ARCHIVE_FATAL);
 }
 
 static int
@@ -603,6 +605,8 @@ archive_write_pax_header(struct archive_write *a,
 	ret = ARCHIVE_OK;
 	need_extension = 0;
 	pax = (struct pax *)a->format_data;
+
+	const time_t ustar_max_mtime = get_ustar_max_mtime();
 
 	/* Sanity check. */
 	if (archive_entry_pathname(entry_original) == NULL) {
@@ -1131,7 +1135,7 @@ archive_write_pax_header(struct archive_write *a,
 	 */
 	if (!need_extension &&
 	    ((archive_entry_mtime(entry_main) < 0)
-		|| (archive_entry_mtime(entry_main) >= USTAR_MAX_MTIME)))
+		|| (archive_entry_mtime(entry_main) >= ustar_max_mtime)))
 		need_extension = 1;
 
 	/* I use a star-compatible file flag attribute. */
@@ -1196,7 +1200,7 @@ archive_write_pax_header(struct archive_write *a,
 	if (a->archive.archive_format != ARCHIVE_FORMAT_TAR_PAX_RESTRICTED ||
 	    need_extension) {
 		if (archive_entry_mtime(entry_main) < 0  ||
-		    archive_entry_mtime(entry_main) >= USTAR_MAX_MTIME  ||
+		    archive_entry_mtime(entry_main) >= ustar_max_mtime  ||
 		    archive_entry_mtime_nsec(entry_main) != 0)
 			add_pax_attr_time(&(pax->pax_header), "mtime",
 			    archive_entry_mtime(entry_main),
@@ -1434,7 +1438,7 @@ archive_write_pax_header(struct archive_write *a,
 		/* Copy mtime, but clip to ustar limits. */
 		s = archive_entry_mtime(entry_main);
 		if (s < 0) { s = 0; }
-		if (s > USTAR_MAX_MTIME) { s = USTAR_MAX_MTIME; }
+		if (s > ustar_max_mtime) { s = ustar_max_mtime; }
 		archive_entry_set_mtime(pax_attr_entry, s, 0);
 
 		/* Standard ustar doesn't support atime. */
@@ -1910,14 +1914,19 @@ url_encode(const char *in)
 {
 	const char *s;
 	char *d;
-	int out_len = 0;
+	size_t out_len = 0;
 	char *out;
 
 	for (s = in; *s != '\0'; s++) {
-		if (*s < 33 || *s > 126 || *s == '%' || *s == '=')
+		if (*s < 33 || *s > 126 || *s == '%' || *s == '=') {
+			if (SIZE_MAX - out_len < 4)
+				return (NULL);
 			out_len += 3;
-		else
+		} else {
+			if (SIZE_MAX - out_len < 2)
+				return (NULL);
 			out_len++;
+		}
 	}
 
 	out = (char *)malloc(out_len + 1);
@@ -2052,3 +2061,18 @@ sparse_list_add(struct pax *pax, int64_t offset, int64_t length)
 	return (_sparse_list_add_block(pax, offset, length, 0));
 }
 
+static time_t
+get_ustar_max_mtime(void)
+{
+	/*
+	 * Technically, the mtime field in the ustar header can
+	 * support 33 bits. We are using all of them to keep
+	 * tar/test/test_option_C_mtree.c simple and passing after 2038.
+	 * For platforms that use signed 32-bit time values we
+	 * use the 32-bit maximum.
+	 */
+	if (sizeof(time_t) > sizeof(int32_t))
+		return (time_t)0x1ffffffff;
+	else
+		return (time_t)0x7fffffff;
+}
