@@ -20,7 +20,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        UNCIA_target: [uncia-win64, uncia-win32, uncia-arm64]
+        UNCIA_target: [uncia-win64, uncia-arm64]
         include:
           - UNCIA_target: uncia-win64
             short_target: win64
