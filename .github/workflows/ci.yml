@@ -24,13 +24,11 @@ jobs:
         include:
           - UNCIA_target: uncia-win64
             short_target: win64
-          - UNCIA_target: uncia-win32
-            short_target: win32
           - UNCIA_target: uncia-arm64
             short_target: arm64
     steps:
       - uses: lukka/get-cmake@latest
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 1
       - name: compile-uncia
