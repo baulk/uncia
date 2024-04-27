@@ -1,5 +1,5 @@
 # Author: Force Charlie Copyright (C) 2022. Force Charlie. All Rights Reserved.
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.29)
 project(uncia)
 
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR AND NOT MSVC_IDE)
@@ -14,7 +14,7 @@ Please delete them.")
 endif()
 
 set(CMAKE_C_STANDARD 17)
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
 
 set(UNCIA_ENABLE_LTO OFF)
@@ -72,8 +72,8 @@ else()
 endif()
 
 set(UNCIA_VERSION_MAJOR 2)
-set(UNCIA_VERSION_MINOR 0)
-set(UNCIA_VERSION_PATCH 6)
+set(UNCIA_VERSION_MINOR 1)
+set(UNCIA_VERSION_PATCH 0)
 set(PACKAGE_VERSION "${UNCIA_VERSION_MAJOR}.${UNCIA_VERSION_MINOR}.${UNCIA_VERSION_PATCH}")
 
 string(TOLOWER "${CMAKE_C_COMPILER_ARCHITECTURE_ID}" UNCIA_ARCH_NAME)
